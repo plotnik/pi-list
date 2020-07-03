@@ -1,0 +1,17 @@
+<project default="ii" basedir=".">
+
+    <target name="ii">
+		<exec executable="ionic">
+		  <arg line="build --prod -- --base-href /ii/"/>
+		</exec>
+    </target>
+    
+    <target name="rr"
+            description="Скопировать приложение на расп">
+		<scp todir="pi:terry@192.168.100.7:/var/www/html/ii"
+		     trust="yes">
+		  <fileset dir="www"/>
+		</scp>
+    </target>
+    
+</project>

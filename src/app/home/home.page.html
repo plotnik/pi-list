@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Raspberry
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Raspberry</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large" color="primary" 
+        [routerLink]="['/books']">Books</ion-button>
+        
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large" color="secondary"
+        [routerLink]="['/films']">Films</ion-button>
+        
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large" color="primary"
+        [routerLink]="['/cowon']">Cowon</ion-button>
+        
+      </ion-col>
+    </ion-row>   
+  </ion-grid>
+
+</ion-content>
