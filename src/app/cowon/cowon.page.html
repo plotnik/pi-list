@@ -3,24 +3,25 @@
     <ion-title>Cowon</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="searchQuery" (ionChange)="searchChanged()"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchQuery" (ionChange)="reload()"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-  <!--
-  <div>
-    results.length: {{results.length}}
-  </div>
-  -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
     <ion-item-sliding *ngFor="let a of results">
       <ion-item>
 
         <ion-item-options>
           <ion-item-option color="primary">
-            <ion-icon slot="start" name="arrow-up" (click)="moveUp(a)"></ion-icon>
-            Up
+            <ion-button (click)="moveUp(a)">
+              Up
+              <ion-icon slot="end" name="arrow-up-circle-outline"></ion-icon>
+            </ion-button>
           </ion-item-option>
         </ion-item-options>
 
@@ -32,4 +33,12 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
 </ion-content>

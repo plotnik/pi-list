@@ -14,47 +14,72 @@ import { Observable } from 'rxjs';
 })
 export class CowonPage implements OnInit {
 
-  dataUrl = "http://192.168.100.7:8080/pi/cowon";
+  baseUrl = 'http://192.168.100.7:8080/pi';
 
   searchQuery = '';
-  cowon: CowonAlbum[];
   results: CowonAlbum[];
+  skip = 0;
+  limit = 20;
 
   constructor(private http: HttpClient) { }
 
+  // инициализация страницы
   ngOnInit() {
-    this.loadJson().subscribe(data => {
-      this.cowon = data;
-      this.results = data;
-    });
+    this.reload();
   }
 
+  // загрузить содержимое страницы с учетом параметров поиска, а также skip и limit
   loadJson(): Observable<any> {
-    return this.http.get(this.dataUrl);
+    let url = this.baseUrl + '/cowon?skip=' + this.skip + '&limit=' + this.limit;
+    if (this.searchQuery) {
+      url += '&q=' + this.searchQuery;
+    }
+    return this.http.get(url);
   }
 
+  // линк на обложку альбома
   albumCover(a: CowonAlbum) {
     return a.cover ? 'http://aerostat-music.netlify.app' + a.cover :
       'https://www.dhivehilyrics.com/images/album/default.jpg';
   }
 
+  // сигнатура альбома
   albumName(a: CowonAlbum) {
-    return (a.drive=='x9'?'1':'2') + ':' + a.az + '/' + (a.artist? a.artist + '/':'') + a.name;
+    return (a.drive === 'x9' ? '1' : '2') + ':' + a.az + '/' + (a.artist ? a.artist + '/' : '') + a.name;
   }
 
-  searchChanged() {
-    if (this.searchQuery.length == 0) {
-      this.results = this.cowon;
-    } else {
-      let q = this.searchQuery.toLowerCase();
-      this.results =this.cowon.filter(a => { 
-        return a.name.toLowerCase().indexOf(q)>=0 || 
-              (a.artist && a.artist.toLowerCase().indexOf(q)>=0); 
-      });
-    }
+  // критерий поиска изменился
+  reload() {
+    this.loadJson().subscribe(data => {
+      this.results = data;
+    });
   }
 
+  // отправляем альбом наверх списка
   moveUp(a: CowonAlbum) {
-    console.log("moveUp:", a);
+    console.log('moveUp:', a);
+    this.http.post(this.baseUrl + '/cowon/up', a).subscribe(data => {
+      this.reload();
+    });
+  }
+
+  loadMore(event) {
+    this.skip += this.limit;
+    this.loadJson().subscribe(data => {
+      this.results = this.results.concat(data);
+      event.target.complete();
+      if (data.length === 0) {
+        event.target.disabled = true;
+      }
+    });
+  }
+
+  doRefresh(event) {
+    this.skip = 0;
+    this.limit = 20;
+    this.loadJson().subscribe(data => {
+      this.results = data;
+      event.target.complete();
+    });
   }
 }
