@@ -1,3 +1,6 @@
 = pi-lists
 
 Списки на Распе
+
+См.также: Tips & Tricks for Ionic on Desktop::
+https://ionicframework.com/blog/tips-tricks-for-ionic-on-desktop/
