@@ -39,7 +39,7 @@ export class CowonPage implements OnInit {
 
   // линк на обложку альбома
   albumCover(a: CowonAlbum) {
-    return a.cover ? 'http://aerostat-music.netlify.app' + a.cover :
+    return a.cover ? 'http://aerostat-music.netlify.app/' + a.cover :
       'https://www.dhivehilyrics.com/images/album/default.jpg';
   }
 
